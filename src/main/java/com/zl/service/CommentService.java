@@ -1,15 +1,15 @@
-package com.nowcoder.service;
+package com.zl.service;
 
-import com.nowcoder.dao.CommentDAO;
-import com.nowcoder.model.Comment;
+
+import com.zl.dao.CommentDAO;
+
+import com.zl.model.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Created by nowcoder on 2016/7/9.
- */
+
 @Service
 public class CommentService {
     @Autowired

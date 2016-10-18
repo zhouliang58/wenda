@@ -1,6 +1,6 @@
-package com.nowcoder.dao;
+package com.zl.dao;
 
-import com.nowcoder.model.Message;
+import com.zl.model.Message;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

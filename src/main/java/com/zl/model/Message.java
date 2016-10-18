@@ -1,10 +1,8 @@
-package com.nowcoder.model;
+package com.zl.model;
 
 import java.util.Date;
 
-/**
- * Created by nowcoder on 2016/7/9.
- */
+
 public class Message {
     private int id;
     private int fromId;

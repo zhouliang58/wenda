@@ -1,13 +1,12 @@
-package com.nowcoder.dao;
+package com.zl.dao;
 
-import com.nowcoder.model.Comment;
+
+import com.zl.model.Comment;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
-/**
- * Created by nowcoder on 2016/7/9.
- */
+
 @Mapper
 public interface CommentDAO {
     String TABLE_NAME = " comment ";

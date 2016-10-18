@@ -1,7 +1,8 @@
-package com.nowcoder.service;
+package com.zl.service;
 
-import com.nowcoder.dao.MessageDAO;
-import com.nowcoder.model.Message;
+
+import com.zl.dao.MessageDAO;
+import com.zl.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
