@@ -12,8 +12,13 @@ import java.util.List;
 
 @Service
 public class CommentService {
+
     @Autowired
     private CommentDAO commentDAO;
+
+    public Comment getCommentById(int id) {
+        return commentDAO.getCommentById(id);
+    }
 
     public List<Comment> getCommentsByEntity(int entityId, int entityType) {
         return commentDAO.selectByEntity(entityId, entityType);
@@ -29,5 +34,9 @@ public class CommentService {
 
     public void deleteComment(int entityId, int entityType) {
         commentDAO.updateStatus(entityId, entityType, 1);
+    }
+
+    public int getUserCommentCount(int userId) {
+        return commentDAO.getUserCommentCount(userId);
     }
 }

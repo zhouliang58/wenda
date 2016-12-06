@@ -26,6 +26,10 @@ public class UserService {
     @Autowired
     private LoginTicketDAO loginTicketDAO;
 
+    public User selectByName(String name) {
+        return userDAO.selectByName(name);
+    }
+
     public User getUser(int id) {
         return userDAO.selectById(id);
     }

@@ -1,34 +1,29 @@
-package com.nowcoder.controller;
+package com.zl.controller;
 
-import com.nowcoder.model.Comment;
-import com.nowcoder.model.EntityType;
-import com.nowcoder.model.HostHolder;
-import com.nowcoder.model.ViewObject;
-import com.nowcoder.service.CommentService;
-import com.nowcoder.service.QuestionService;
-import com.nowcoder.service.SensitiveService;
-import com.nowcoder.service.UserService;
-import com.nowcoder.util.WendaUtil;
+
+import com.zl.async.EventModel;
+import com.zl.async.EventProducer;
+import com.zl.async.EventType;
+import com.zl.model.Comment;
+import com.zl.model.EntityType;
+import com.zl.model.HostHolder;
+import com.zl.service.CommentService;
+import com.zl.service.QuestionService;
+import com.zl.service.SensitiveService;
+import com.zl.service.UserService;
+import com.zl.util.WendaUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.HtmlUtils;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-/**
- * Created by nowcoder on 2016/7/2.
- */
+
 @Controller
 public class CommentController {
     private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
@@ -47,6 +42,9 @@ public class CommentController {
 
     @Autowired
     SensitiveService sensitiveService;
+
+    @Autowired
+    EventProducer eventProducer;
 
     @RequestMapping(path = {"/addComment"}, method = {RequestMethod.POST})
     public String addComment(@RequestParam("questionId") int questionId,
@@ -68,6 +66,12 @@ public class CommentController {
             comment.setStatus(0);
 
             commentService.addComment(comment);
+
+            logger.info("发送一个评论的异步消息");
+            eventProducer.fireEvent(new EventModel(EventType.COMMENT)
+                    .setActorId(hostHolder.getUser().getId()).setEntityId(questionId)
+                    .setEntityType(EntityType.ENTITY_QUESTION).setEntityOwnerId(questionService.getById(questionId).getUserId()));
+
             // 更新题目里的评论数量
             int count = commentService.getCommentCount(comment.getEntityId(), comment.getEntityType());
             questionService.updateCommentCount(comment.getEntityId(), count);

@@ -4,14 +4,15 @@ import com.zl.dao.CommentDAO;
 import com.zl.dao.QuestionDAO;
 import com.zl.dao.UserDAO;
 import com.zl.model.Comment;
+import com.zl.model.EntityType;
 import com.zl.model.Question;
 import com.zl.model.User;
+import com.zl.service.LikeService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
@@ -32,6 +33,9 @@ public class InitDatabaseTests {
 
     @Autowired
     CommentDAO commentDAO;
+
+    @Autowired
+    LikeService likeService;
 
     @Test
     public  void questionTest(){
@@ -79,5 +83,10 @@ public class InitDatabaseTests {
             comment.setStatus(1);
             commentDAO.addComment(comment);
         }
+    }
+
+    @Test
+    public void kile(){
+        long likeCount = likeService.like(13, EntityType.ENTITY_COMMENT, 23);
     }
 }

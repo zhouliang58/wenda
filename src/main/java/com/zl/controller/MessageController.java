@@ -1,12 +1,13 @@
-package com.nowcoder.controller;
+package com.zl.controller;
 
-import com.nowcoder.model.HostHolder;
-import com.nowcoder.model.Message;
-import com.nowcoder.model.User;
-import com.nowcoder.model.ViewObject;
-import com.nowcoder.service.MessageService;
-import com.nowcoder.service.UserService;
-import com.nowcoder.util.WendaUtil;
+
+import com.zl.model.HostHolder;
+import com.zl.model.Message;
+import com.zl.model.User;
+import com.zl.model.ViewObject;
+import com.zl.service.MessageService;
+import com.zl.service.UserService;
+import com.zl.util.WendaUtil;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by nowcoder on 2016/7/9.
- */
+
 @Controller
 public class MessageController {
     private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
@@ -46,7 +45,7 @@ public class MessageController {
             List<Message> conversationList = messageService.getConversationList(localUserId, 0, 10);
             for (Message msg : conversationList) {
                 ViewObject vo = new ViewObject();
-                vo.set("conversation", msg);
+                vo.set("message", msg);
                 int targetId = msg.getFromId() == localUserId ? msg.getToId() : msg.getFromId();
                 User user = userService.getUser(targetId);
                 vo.set("user", user);
