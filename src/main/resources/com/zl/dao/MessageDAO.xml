@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zl.dao.MessageDAO">
+    <resultMap type="com.zl.model.Message" id="MessageResultMap">
+        <result property="id" column="id" />
+        <result property="fromId" column="from_id" />
+        <result property="toId" column="to_id" />
+        <result property="content" column="content" jdbcType="CLOB"
+                javaType = "java.lang.String"  typeHandler ="com.zl.util.OracleClobTypeHandler" />
+        <result property="hasRead" column="has_read" />
+        <result property="conversationId" column="conversation_id" />
+        <result property="createdDate" column="created_date" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+
+    <insert id="addMessage" parameterType="com.zl.model.Message" >
+        <selectKey resultType="int" order="BEFORE" keyProperty="id">
+            select SEQ__TB_MESSAGE_ID.nextval as id from dual
+        </selectKey>
+        insert into tb_message(id, from_id, to_id, content, has_read, conversation_id, created_date)
+        values(#{id},#{fromId},#{toId},#{content,jdbcType=CLOB},#{hasRead},#{conversationId},#{createdDate})
+    </insert>
+
+    <select id="getConversationList" resultType="com.zl.model.Message">
+        select from_id, to_id,  has_read, conversation_id, created_date ,count(*) as id,to_char(content) as content
+        from (
+        select tb_message.*  , ROWNUM RN from tb_message where from_id=#{userId} or to_id=#{userId} order by id desc
+        )
+        tt where RN BETWEEN #{offset} and #{limit}
+        group by  from_id, to_id,  has_read, conversation_id, created_date,to_char(content)
+        order by created_date desc
+    </select>
+
+    <select id="getConversationDetail" resultMap="MessageResultMap">
+        select id, from_id, to_id,  has_read, conversation_id, created_date , content FROM
+        (
+           select id, from_id, to_id,  has_read, conversation_id, created_date , content , ROWNUM RN
+            from tb_message
+            where conversation_id=#{conversationId} order by id desc
+        )
+        where RN BETWEEN #{offset} and #{limit}
+    </select>
+
+
+</mapper>

@@ -39,7 +39,7 @@ public class JedisAdapter implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        pool = new JedisPool("redis://192.168.159.129:6379/10");
+        pool = new JedisPool("redis://localhost:6379/2");
     }
 
     public long sadd(String key, String value) {

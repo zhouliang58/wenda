@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zl.dao.UserDAO">
+    <resultMap type="com.zl.model.User" id="UserResultMap">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="password" column="password" />
+        <result property="salt" column="salt" />
+        <result property="headUrl" column="head_url" />
+    </resultMap>
+
+    <sql id="Tabel_Name">
+        tb_user
+    </sql>
+
+    <!-- 表中所有列 -->
+    <sql id="User_Column_List" >
+        id , name, password, salt, head_url
+    </sql>
+
+    <insert id="addUser" parameterType="com.zl.model.User" >
+        <selectKey resultType="int" order="BEFORE" keyProperty="id">
+            select SEQ__TB_USER_ID.nextval as id from dual
+        </selectKey>
+        insert into tb_user(id , name, password, salt, head_url) values(#{id},#{name},#{password},#{salt},#{headUrl})
+    </insert>
+
+    <!-- 3.只修改不为空的字段 -->
+<!--    <update id="updatePassword" parameterType="com.zl.model.User" >
+        update tb_user set
+        <trim  suffixOverrides="," >
+            <if test="name != null  and name != '' ">
+                name=#{name},
+            </if>
+            <if test="salt != null and salt != '' ">
+                salt=#{salt},
+            </if>
+            <if test="password != null and password != '' ">
+                password=#{password},
+            </if>
+            <if test="headUrl != null  and headUrl != '' ">
+                head_url=#{headUrl},
+            </if>
+        </trim>
+        where id=#{id}
+    </update>-->
+
+</mapper>

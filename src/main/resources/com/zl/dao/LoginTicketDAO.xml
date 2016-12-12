@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zl.dao.LoginTicketDAO">
+
+    <insert id="addTicket" parameterType="com.zl.model.LoginTicket" >
+        <selectKey resultType="int" order="BEFORE" keyProperty="id">
+            select SEQ__TB_LOGINTICKET_ID.nextval as id from dual
+        </selectKey>
+        insert into tb_login_ticket(id,user_id, expired, status, ticket) values(#{id},#{userId},#{expired},#{status},#{ticket})
+    </insert>
+
+
+</mapper>

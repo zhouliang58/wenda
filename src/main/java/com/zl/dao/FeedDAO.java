@@ -2,7 +2,6 @@ package com.zl.dao;
 
 
 import com.zl.model.Feed;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -18,8 +17,8 @@ public interface FeedDAO {
     String INSERT_FIELDS = " user_id, data, created_date, type ";
     String SELECT_FIELDS = " id, " + INSERT_FIELDS;
 
-    @Insert({"insert into ", TABLE_NAME, "(", INSERT_FIELDS,
-            ") values (#{userId},#{data},#{createdDate},#{type})"})
+/*    @Insert({"insert into ", TABLE_NAME, "(", INSERT_FIELDS,
+            ") values (#{userId},#{data},#{createdDate},#{type})"})*/
     int addFeed(Feed feed);
 
     @Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where id=#{id}"})
@@ -28,4 +27,5 @@ public interface FeedDAO {
     List<Feed> selectUserFeeds(@Param("maxId") int maxId,
                                @Param("userIds") List<Integer> userIds,
                                @Param("count") int count);
+
 }

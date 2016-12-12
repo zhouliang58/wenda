@@ -1,5 +1,6 @@
 package com.zl.model;
 
+
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.Date;
@@ -12,7 +13,7 @@ public class Feed {
     private int type;
     private int userId;
     private Date createdDate;
-    private String data;
+    private String data;//数据是json字符串
     private JSONObject dataJSON = null;
 
     public int getId() {
@@ -57,5 +58,17 @@ public class Feed {
     }
     public String get(String key) {
         return dataJSON == null ? null : dataJSON.getString(key);
+    }
+
+    @Override
+    public String toString() {
+        return "Feed{" +
+                "id=" + id +
+                ", type=" + type +
+                ", userId=" + userId +
+                ", createdDate=" + createdDate +
+                ", data='" + data + '\'' +
+                ", dataJSON=" + dataJSON +
+                '}';
     }
 }

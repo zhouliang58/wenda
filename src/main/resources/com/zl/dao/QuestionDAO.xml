@@ -2,11 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zl.dao.QuestionDAO">
-    <sql id="table">question</sql>
+
+    <!--对oracle中的clob进行处理-->
+    <resultMap type="com.zl.model.Question" id="QuestionResultMap">
+        <result property="id" column="id" />
+        <result property="title" column="title" />
+        <result property="content" column="content" jdbcType="CLOB"
+                javaType = "java.lang.String"  typeHandler ="com.zl.util.OracleClobTypeHandler"/>
+        <result property="commentCount" column="comment_count" />
+        <result property="createdDate" column="created_date" jdbcType="TIMESTAMP"/>
+        <result property="userId" column="user_id" />
+    </resultMap>
+
+
+    <sql id="table">tb_question</sql>
     <sql id="selectFields">id, title, content, comment_count,created_date,user_id
     </sql>
-    <select id="selectLatestQuestions" resultType="com.zl.model.Question">
-        SELECT
+    <select id="selectLatestQuestions" resultMap="QuestionResultMap">
+<!--        SELECT
         <include refid="selectFields"/>
         FROM
         <include refid="table"/>
@@ -15,6 +28,20 @@
             WHERE user_id = #{userId}
         </if>
         ORDER BY id DESC
-        LIMIT #{offset},#{limit}
+        LIMIT #{offset},#{limit}-->
+        SELECT <include refid="selectFields"/> FROM
+        (
+        SELECT tb_question.*, ROWNUM RN
+        FROM tb_question
+        )
+        WHERE RN BETWEEN #{offset} and #{limit} ORDER BY id DESC
     </select>
+
+    <insert id="addQuestion" parameterType="com.zl.model.Question" >
+        <selectKey resultType="int" order="BEFORE" keyProperty="id">
+            select SEQ__TB_QUESTION_ID.nextval as id from dual
+        </selectKey>
+        insert into tb_question(id, title, content, comment_count,created_date,user_id)
+        values(#{id}, #{title}, #{content,jdbcType=CLOB}, #{commentCount},#{createdDate},#{userId})
+    </insert>
 </mapper>
